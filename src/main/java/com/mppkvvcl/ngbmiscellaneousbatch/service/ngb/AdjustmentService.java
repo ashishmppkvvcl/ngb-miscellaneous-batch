@@ -27,7 +27,7 @@ public class AdjustmentService {
 
         setAuditDetails(adjustment);
         LOGGER.info("ADJUSTMENT BEFORE SAVING:::: " + adjustment);
-        return null;//TODO:adjustmentDAO.add(adjustment);
+        return adjustmentDAO.add(adjustment);
     }
 
     private void setAuditDetails(final AdjustmentInterface adjustment) {

@@ -3,6 +3,7 @@ package com.mppkvvcl.ngbmiscellaneousbatch.factory.ngb;
 import com.mppkvvcl.ngbentity.beans.Adjustment;
 import com.mppkvvcl.ngbinterface.interfaces.AdjustmentInterface;
 import com.mppkvvcl.ngbmiscellaneousbatch.utility.MiscellaneousBatchConstants;
+import org.springframework.util.StringUtils;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -13,7 +14,7 @@ public class AdjustmentFactory {
         return new Adjustment();
     }
 
-    public static AdjustmentInterface build(final BigDecimal amount, final String locationCode, final String consumerNo, final long ngbPaymentId) {
+    public static AdjustmentInterface build(final BigDecimal amount, final String locationCode, final String consumerNo, final long ngbPaymentId, final String pan) {
 
         if (amount == null || locationCode == null) {
             return null;
@@ -27,7 +28,10 @@ public class AdjustmentFactory {
         adjustment.setPosted(MiscellaneousBatchConstants.FALSE);
         adjustment.setDeleted(MiscellaneousBatchConstants.FALSE);
         adjustment.setApprovalStatus(MiscellaneousBatchConstants.STATUS_APPROVED);
-        adjustment.setRemark("" + ngbPaymentId);
+
+        String remark = "" + ngbPaymentId;
+        if (!StringUtils.isEmpty(pan)) remark = remark + " | " + pan;
+        adjustment.setRemark(remark);
 
         return adjustment;
     }

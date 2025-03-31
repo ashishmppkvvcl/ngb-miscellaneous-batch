@@ -83,7 +83,7 @@ public class PaymentImplService {
             if (paymentPANFYMapping.getPaymentAmount() > ConfigHolder.TDS_194Q_FY_THRESHOLD_AMOUNT) {
                 long exceededAmount = paymentPANFYMapping.getPaymentAmount() - baselineAmountToDeduct;
                 final BigDecimal adjustmentAmount = new BigDecimal(exceededAmount / 100).multiply(ConfigHolder.TDS_194Q_PAN_AVAILABLE_TDS_PERCENTAGE);
-                final AdjustmentInterface adjustment = AdjustmentFactory.build(adjustmentAmount, ngbPayment.getLocationCode(), consumerNo, ngbPayment.getId());
+                final AdjustmentInterface adjustment = AdjustmentFactory.build(adjustmentAmount, ngbPayment.getLocationCode(), consumerNo, ngbPayment.getId(), pan);
                 outMap.put("ADJUSTMENT", adjustment);
             }
         } else {
@@ -110,7 +110,7 @@ public class PaymentImplService {
             if (paymentConsumerFYMapping.getPaymentAmount() > ConfigHolder.TDS_194Q_FY_THRESHOLD_AMOUNT) {
                 long exceededAmount = paymentConsumerFYMapping.getPaymentAmount() - baselineAmountToDeduct;
                 final BigDecimal adjustmentAmount = new BigDecimal(exceededAmount / 100).multiply(ConfigHolder.TDS_194Q_PAN_NOT_AVAILABLE_TDS_PERCENTAGE);
-                final AdjustmentInterface adjustment = AdjustmentFactory.build(adjustmentAmount, ngbPayment.getLocationCode(), consumerNo, ngbPayment.getId());
+                final AdjustmentInterface adjustment = AdjustmentFactory.build(adjustmentAmount, ngbPayment.getLocationCode(), consumerNo, ngbPayment.getId(), null);
                 outMap.put("ADJUSTMENT", adjustment);
             }
         }
