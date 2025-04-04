@@ -2,10 +2,12 @@ package com.mppkvvcl.ngbmiscellaneousbatch.job.configuration.jobone;
 
 import com.mppkvvcl.ngbentity.beans.Payment;
 import com.mppkvvcl.ngbinterface.interfaces.PaymentInterface;
+import com.mppkvvcl.ngbmiscellaneousbatch.job.holder.jobone.JobOneHolder;
 import com.mppkvvcl.ngbmiscellaneousbatch.job.writer.jobone.JobOneStepTwoItemWriter;
 import com.mppkvvcl.ngbmiscellaneousbatch.utility.MiscellaneousBatchConstants;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.batch.core.configuration.annotation.StepScope;
 import org.springframework.batch.item.ItemWriter;
 import org.springframework.batch.item.database.JdbcPagingItemReader;
 import org.springframework.batch.item.database.Order;
@@ -35,12 +37,13 @@ public class JobOneStepTwoConfiguration {
     private DataSource dataSource;
 
     @Bean
+    @StepScope
     public JdbcPagingItemReader<Payment> jobOneStepTwoReader() {
         String methodName = "jobOneStepTwoReader() : ";
         LOGGER.info(methodName + "called to get max record from ngb payment table");
 
         Map<String, Object> parameterValues = new HashMap<>();
-        //parameterValues.put("minId", JobOneHolder.LAST_PAYMENT_COUNTER);
+        parameterValues.put("minId", JobOneHolder.LAST_PAYMENT_COUNTER);
         parameterValues.put("deleted", MiscellaneousBatchConstants.FALSE);
 
         return new JdbcPagingItemReaderBuilder<Payment>()
@@ -66,7 +69,7 @@ public class JobOneStepTwoConfiguration {
 
         PostgresPagingQueryProvider provider = new PostgresPagingQueryProvider();
         provider.setSelectClause("select * ");
-        provider.setFromClause("from payment where deleted= :deleted and created_on::date<CURRENT_DATE");// id> :minId and
+        provider.setFromClause("from payment where id> :minId and deleted= :deleted and created_on::date<CURRENT_DATE");
 
         Map<String, Order> sortKeys = new HashMap<>(1);
         sortKeys.put("id", Order.DESCENDING);
