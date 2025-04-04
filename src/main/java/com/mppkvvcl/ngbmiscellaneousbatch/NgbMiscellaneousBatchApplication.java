@@ -15,9 +15,9 @@ public class NgbMiscellaneousBatchApplication {
 
     public static void main(String[] args) {
         setLoggingFile();
+        //APPLICATION_CONTEXT =
         SpringApplication.run(NgbMiscellaneousBatchApplication.class, args);
 
-        //APPLICATION_CONTEXT = SpringApplication.run(NgbMiscellaneousBatchApplication.class, args);
         //test();
     }
 

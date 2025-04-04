@@ -20,8 +20,6 @@ import org.springframework.jdbc.core.RowMapper;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,16 +39,8 @@ public class JobOneStepTwoConfiguration {
         String methodName = "jobOneStepTwoReader() : ";
         LOGGER.info(methodName + "called to get max record from ngb payment table");
 
-        final Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.DATE, -1);
-        calendar.set(Calendar.HOUR_OF_DAY, 0);
-        calendar.set(Calendar.MINUTE, 0);
-        calendar.set(Calendar.SECOND, 0);
-        final Date referenceDate = calendar.getTime();
-
         Map<String, Object> parameterValues = new HashMap<>();
         //parameterValues.put("minId", JobOneHolder.LAST_PAYMENT_COUNTER);
-        parameterValues.put("referenceDate", referenceDate);
         parameterValues.put("deleted", MiscellaneousBatchConstants.FALSE);
 
         return new JdbcPagingItemReaderBuilder<Payment>()
@@ -76,7 +66,7 @@ public class JobOneStepTwoConfiguration {
 
         PostgresPagingQueryProvider provider = new PostgresPagingQueryProvider();
         provider.setSelectClause("select * ");
-        provider.setFromClause("from payment where deleted= :deleted and created_on::date= :referenceDate");// id> :minId and
+        provider.setFromClause("from payment where deleted= :deleted and created_on::date<CURRENT_DATE");// id> :minId and
 
         Map<String, Order> sortKeys = new HashMap<>(1);
         sortKeys.put("id", Order.DESCENDING);
